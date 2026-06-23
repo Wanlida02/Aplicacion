@@ -1,10 +1,10 @@
-// netlify/functions/save-checklist.js
+// functions/save-checklist.js
 const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
 const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_TABLE_NAME;
 const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -13,8 +13,15 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    if (!AIRTABLE_BASE_ID || !AIRTABLE_TABLE_NAME || !AIRTABLE_TOKEN) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Faltan variables de entorno de Airtable" })
+      };
+    }
+
     const data = JSON.parse(event.body || "{}");
-    const { id_tarjeta, criticidad, notes } = data;
+    const { id_tarjeta, criticidad, notes, notas } = data;
 
     if (!id_tarjeta) {
       return {
@@ -23,17 +30,29 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Buscar si ya existe un registro para esa tarjeta
-    const filterFormula = encodeURIComponent(`{id_tarjeta} = "${id_tarjeta}"`);
+    const notesValue = notes ?? notas ?? "";
+
+    const filterFormula = encodeURIComponent(`{id_tarjeta}="${id_tarjeta}"`);
 
     const findRes = await fetch(
       `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}?filterByFormula=${filterFormula}`,
       {
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${AIRTABLE_TOKEN}`
+          Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+          "Content-Type": "application/json"
         }
       }
     );
+
+    if (!findRes.ok) {
+      const txt = await findRes.text();
+      console.error("Airtable find error:", txt);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Error buscando en Airtable", detail: txt })
+      };
+    }
 
     const findJson = await findRes.json();
     const existing = findJson.records && findJson.records[0];
@@ -41,20 +60,16 @@ exports.handler = async (event, context) => {
     const fields = {
       id_tarjeta,
       criticidad: criticidad || "",
-      notes: notes || ""
+      notes: notesValue
     };
 
     let url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`;
     let method = "POST";
-    let body;
+    let body = JSON.stringify({ fields });
 
     if (existing) {
-      // Actualizar registro existente
-      url += `/${existing.id}`;
+      url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${existing.id}`;
       method = "PATCH";
-      body = JSON.stringify({ fields });
-    } else {
-      // Crear registro nuevo
       body = JSON.stringify({ fields });
     }
 
@@ -69,22 +84,30 @@ exports.handler = async (event, context) => {
 
     if (!saveRes.ok) {
       const txt = await saveRes.text();
-      console.error("Airtable error:", txt);
+      console.error("Airtable save error:", txt);
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: "Error guardando en Airtable" })
+        body: JSON.stringify({ error: "Error guardando en Airtable", detail: txt })
       };
     }
 
+    const saveJson = await saveRes.json();
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ ok: true })
+      body: JSON.stringify({
+        ok: true,
+        recordId: saveJson.id || null
+      })
     };
   } catch (err) {
-    console.error(err);
+    console.error("Function error:", err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Error interno" })
+      body: JSON.stringify({
+        error: "Error interno",
+        detail: err.message || String(err)
+      })
     };
   }
 };

@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checklist Parte A</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f5f7;
+    }
+    header {
+      background: #0b3954;
+      color: #fff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    main {
+      padding: 1rem 1.5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .block {
+      background: #ffffff;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #d6dde5;
+    }
+    .block-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e1e4ea;
+      background: #f0f3f8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .block-title {
+      font-weight: 600;
+    }
+    .block-subtitle {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .cards-container {
+      padding: 0.75rem 1rem 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.75rem;
+    }
+    .card {
+      border: 1px solid #d6dde5;
+      border-radius: 6px;
+      background: #fafbfc;
+      padding: 0.5rem 0.75rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.9rem;
+    }
+    .card-header-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .card-code {
+      font-weight: 600;
+      color: #0b3954;
+      white-space: nowrap;
+    }
+    .card-area {
+      font-weight: 500;
+    }
+    .card-focus {
+      font-size: 0.8rem;
+      color: #444;
+    }
+    .field-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #666;
+    }
+    .field-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.1rem;
+    }
+    .criticality-select {
+      padding: 0.2rem 0.3rem;
+      font-size: 0.8rem;
+    }
+    .notes-textarea {
+      width: 100%;
+      min-height: 40px;
+      resize: vertical;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.3rem;
+    }
+    .accordion {
+      margin-top: 0.25rem;
+      border-top: 1px dashed #d6dde5;
+      padding-top: 0.25rem;
+    }
+    details {
+      font-size: 0.8rem;
+      margin-top: 0.1rem;
+    }
+    summary {
+      cursor: pointer;
+      list-style: none;
+      font-weight: 500;
+      color: #0b3954;
+    }
+    summary::marker,
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::before {
+      content: "▶ ";
+      font-size: 0.7rem;
+    }
+    details[open] summary::before {
+      content: "▼ ";
+    }
+    .attachments-list {
+      margin-top: 0.25rem;
+      padding-left: 0.75rem;
+    }
+    .attachments-list li {
+      line-height: 1.3;
+    }
+    .mode-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.5rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      border: 1px solid rgba(255,255,255,0.5);
+      background: rgba(0,0,0,0.15);
+    }
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Checklist Parte A – Preflight</h1>
+    <div class="mode-toggle">
+      <span class="mode-badge" id="modeBadge">Modo usuario</span>
+      <label>
+        <input type="checkbox" id="editModeToggle" />
+        Activar modo edición
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <!-- BLOQUE 1 -->
+    <section class="block" id="block1">
+      <div class="block-header">
+        <div>
+          <div class="block-title">Bloque 1 – Licence and medical</div>
+          <div class="block-subtitle">Licencia y certificados médicos (A20)</div>
+        </div>
+      </div>
+      <div class="cards-container">
+        <!-- A20 -->
+        <article class="card" data-code="A20">
+          <div class="card-header-line">
+            <span class="card-code">A20</span>
+            <span class="card-area">Flight crew licence</span>
+          </div>
+          <div class="card-focus">
+            Licence, medical
+          </div>
+
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Añadir notas rápidas específicas para A20..."></textarea>
+          </div>
+
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- BLOQUE 2 -->
+    <section class="block" id="block2">
+      <div class="block-header">
+        <div>
+          <div class="block-title">Bloque 2 – Aircraft & operator certificates</div>
+          <div class="block-subtitle">Certificados A08, A09, A10, A11, A12</div>
+        </div>
+      </div>
+      <div class="cards-container">
+        <!-- A08 -->
+        <article class="card" data-code="A08">
+          <div class="card-header-line">
+            <span class="card-code">A08</span>
+            <span class="card-area">Certificate of Registration</span>
+          </div>
+          <div class="card-focus">
+            Presence, accuracy, copy/electronic acceptance
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A08..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A09 -->
+        <article class="card" data-code="A09">
+          <div class="card-header-line">
+            <span class="card-code">A09</span>
+            <span class="card-area">Noise Certificate</span>
+          </div>
+          <div class="card-focus">
+            Presence, accuracy
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A09..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A10 -->
+        <article class="card" data-code="A10">
+          <div class="card-header-line">
+            <span class="card-code">A10</span>
+            <span class="card-area">AOC or Equivalent</span>
+          </div>
+          <div class="card-focus">
+            AOC/declaration/specific approvals/operations specs
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A10..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A11 -->
+        <article class="card" data-code="A11">
+          <div class="card-header-line">
+            <span class="card-code">A11</span>
+            <span class="card-area">Radio licence</span>
+          </div>
+          <div class="card-focus">
+            Presence, accuracy
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A11..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A12 -->
+        <article class="card" data-code="A12">
+          <div class="card-header-line">
+            <span class="card-code">A12</span>
+            <span class="card-area">Certificate of Airworthiness</span>
+          </div>
+          <div class="card-focus">
+            Presence, accuracy, updated
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A12..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- BLOQUE 3 -->
+    <section class="block" id="block3">
+      <div class="block-header">
+        <div>
+          <div class="block-title">Bloque 3 – Flight prep & load sheet</div>
+          <div class="block-subtitle">Briefing incoming flight / METEO – A13, A14</div>
+        </div>
+      </div>
+      <div class="cards-container">
+        <!-- A13 -->
+        <article class="card" data-code="A13">
+          <div class="card-header-line">
+            <span class="card-code">A13</span>
+            <span class="card-area">Flight Preparation</span>
+          </div>
+          <div class="card-focus">
+            OFP, fuel, NOTAMs, weather, alternates, icing, refuelling
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A13..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A14 -->
+        <article class="card" data-code="A14">
+          <div class="card-header-line">
+            <span class="card-code">A14</span>
+            <span class="card-area">Mass and Balance</span>
+          </div>
+          <div class="card-focus">
+            MB sheet, calculations, load distribution, limits
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A14..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- BLOQUE 4 -->
+    <section class="block" id="block4">
+      <div class="block-header">
+        <div>
+          <div class="block-title">Bloque 4 – Checklists / manuals systems</div>
+          <div class="block-subtitle">Foreflight, Jeppesen – A04, A05</div>
+        </div>
+      </div>
+      <div class="cards-container">
+        <!-- A04 -->
+        <article class="card" data-code="A04">
+          <div class="card-header-line">
+            <span class="card-code">A04</span>
+            <span class="card-area">Manuals</span>
+          </div>
+          <div class="card-focus">
+            OM/AFM present, current, language understood, DG/fuel/checks
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A04..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A05 -->
+        <article class="card" data-code="A05">
+          <div class="card-header-line">
+            <span class="card-code">A05</span>
+            <span class="card-area">Checklists</span>
+          </div>
+          <div class="card-focus">
+            Availability, accessibility, version control, conformity
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A05..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- BLOQUE 5 -->
+    <section class="block" id="block5">
+      <div class="block-header">
+        <div>
+          <div class="block-title">Bloque 5 – Nav data</div>
+          <div class="block-subtitle">Ground proximity test & NAV database – A06</div>
+        </div>
+      </div>
+      <div class="cards-container">
+        <!-- A06 -->
+        <article class="card" data-code="A06">
+          <div class="card-header-line">
+            <span class="card-code">A06</span>
+            <span class="card-area">Navigation / Instrument Charts</span>
+          </div>
+          <div class="card-focus">
+            Charts, FMS database, AIRAC, critical phases
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A06..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- BLOQUE 6 -->
+    <section class="block" id="block6">
+      <div class="block-header">
+        <div>
+          <div class="block-title">Bloque 6 – General status</div>
+          <div class="block-subtitle">A01, A02, A03, A07, A15, A16, A17, A18, A19</div>
+        </div>
+      </div>
+      <div class="cards-container">
+        <!-- A01 -->
+        <article class="card" data-code="A01">
+          <div class="card-header-line">
+            <span class="card-code">A01</span>
+            <span class="card-area">General Condition</span>
+          </div>
+          <div class="card-focus">
+            No means to monitor door area / cockpit door / windows / equipment / wiring / placards
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A01..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A02 -->
+        <article class="card" data-code="A02">
+          <div class="card-header-line">
+            <span class="card-code">A02</span>
+            <span class="card-area">Emergency Exit</span>
+          </div>
+          <div class="card-focus">
+            Exits impeded / US / escape facilities / ropes-hatches-harnesses
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A02..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A03 -->
+        <article class="card" data-code="A03">
+          <div class="card-header-line">
+            <span class="card-code">A03</span>
+            <span class="card-area">Equipment</span>
+          </div>
+          <div class="card-focus">
+            TAWS/ACAS/CVR/RVSM/PBN/NAT HLA/8.33/EFB/Headset
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A03..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A07 -->
+        <article class="card" data-code="A07">
+          <div class="card-header-line">
+            <span class="card-code">A07</span>
+            <span class="card-area">MEL</span>
+          </div>
+          <div class="card-focus">
+            MEL available, customized, less restrictive than MMEL
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A07..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A15 -->
+        <article class="card" data-code="A15">
+          <div class="card-header-line">
+            <span class="card-code">A15</span>
+            <span class="card-area">Handfire extinguisher</span>
+          </div>
+          <div class="card-focus">
+            Presence, access, number, serviceability, mounting
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A15..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A16 -->
+        <article class="card" data-code="A16">
+          <div class="card-header-line">
+            <span class="card-code">A16</span>
+            <span class="card-area">Life Jackets / Flotation Devices</span>
+          </div>
+          <div class="card-focus">
+            Presence, access, number, serviceability
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A16..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A17 -->
+        <article class="card" data-code="A17">
+          <div class="card-header-line">
+            <span class="card-code">A17</span>
+            <span class="card-area">Harness</span>
+          </div>
+          <div class="card-focus">
+            Presence and serviceability for crew seats
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A17..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A18 -->
+        <article class="card" data-code="A18">
+          <div class="card-header-line">
+            <span class="card-code">A18</span>
+            <span class="card-area">Oxygen equipment</span>
+          </div>
+          <div class="card-focus">
+            Presence, access, number, serviceability, mounting
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A18..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- A19 -->
+        <article class="card" data-code="A19">
+          <div class="card-header-line">
+            <span class="card-code">A19</span>
+            <span class="card-area">Independent portable light</span>
+          </div>
+          <div class="card-focus">
+            Presence, access, number, serviceability, mounting
+          </div>
+          <div class="field-row">
+            <span class="field-label">Criticidad</span>
+            <select class="criticality-select editable-field" disabled>
+              <option value="">No definido</option>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
+          <div class="field-row" style="flex-direction:column; align-items:flex-start;">
+            <span class="field-label">Notas rápidas</span>
+            <textarea class="notes-textarea editable-field" disabled placeholder="Notas para A19..."></textarea>
+          </div>
+          <div class="accordion">
+            <details>
+              <summary>Findings</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+            <details>
+              <summary>Qué ver / Fotos</summary>
+              <ul class="attachments-list"><li>Cargando...</li></ul>
+            </details>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const toggle = document.getElementById('editModeToggle');
+    const badge = document.getElementById('modeBadge');
+    const editableFields = document.querySelectorAll('.editable-field');
+
+    function setEditMode(isEdit) {
+      editableFields.forEach(el => {
+        el.disabled = !isEdit;
+      });
+      if (isEdit) {
+        badge.textContent = 'Modo edición';
+        badge.style.background = 'rgba(0,0,0,0.35)';
+      } else {
+        badge.textContent = 'Modo usuario';
+        badge.style.background = 'rgba(0,0,0,0.15)';
+      }
+    }
+
+    toggle.addEventListener('change', (e) => {
+      setEditMode(e.target.checked);
+    });
+
+    // Estado inicial: modo usuario
+    setEditMode(false);
+
+    // ---- CONFIGURACIÓN DE CARPETAS PARA FINDINGS / QUÉ VER ----
+    const basePath = "/assets"; // carpeta raíz estática en Netlify
+
+    const attachmentsConfig = {
+      A01: { folder: "a01 general condition" },
+      A02: { folder: "a02 emergency exit" },
+      A03: { folder: "a03 equipment" },
+      A04: { folder: "a04 manuals" },
+      A05: { folder: "a05 checklists" },
+      A06: { folder: "a06 navigation charts" },
+      A07: { folder: "a07 mel" },
+      A08: { folder: "a08 certificate of registration" },
+      A09: { folder: "a09 noise certificate" },
+      A10: { folder: "a10 aoc" },
+      A11: { folder: "a11 radio licence" },
+      A12: { folder: "a12 certificate of airworthiness" },
+      A13: { folder: "a13 flight preparation" },
+      A14: { folder: "a14 mass and balance" },
+      A15: { folder: "a15 handfire extinguisher" },
+      A16: { folder: "a16 life jackets" },
+      A17: { folder: "a17 harness" },
+      A18: { folder: "a18 oxygen equipment" },
+      A19: { folder: "a19 portable light" },
+      A20: { folder: "a20 flight crew licence" }
+    };
+
+    function renderAttachmentsFromFolders() {
+      Object.entries(attachmentsConfig).forEach(([code, cfg]) => {
+        const card = document.querySelector(`.card[data-code="${code}"]`);
+        if (!card || !cfg.folder) return;
+
+        const lists = card.querySelectorAll(".attachments-list");
+        if (lists.length < 2) return;
+
+        const findingsUl = lists[0];  // primer <ul> = Findings
+        const photosUl   = lists[1];  // segundo <ul> = Qué ver / Fotos
+
+        const folderPath = `${basePath}/${cfg.folder}`;
+
+        findingsUl.innerHTML = `
+          <li>
+            <a href="${folderPath}/Findings.pdf" target="_blank">
+              Findings – ${code}
+            </a>
+          </li>
+        `;
+
+        photosUl.innerHTML = `
+          <li>
+            <a href="${folderPath}/Que ver.pdf" target="_blank">
+              Qué ver – ${code}
+            </a>
+          </li>
+        `;
+      });
+    }
+
+    // ---- PERSISTENCIA CON AIRTABLE A TRAVÉS DE NETLIFY FUNCTIONS ----
+    const API_BASE = "/.netlify/functions";
+
+    async function fetchAllStates() {
+      try {
+        const res = await fetch(`${API_BASE}/load-checklist`);
+        if (!res.ok) return [];
+        return await res.json();
+      } catch (e) {
+        console.error("Error cargando estados", e);
+        return [];
+      }
+    }
+
+    async function saveStateForCard(code, crit, notes) {
+      try {
+        await fetch(`${API_BASE}/save-checklist`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_tarjeta: code,
+            criticidad: crit,
+            notas
+          })
+        });
+      } catch (e) {
+        console.error("Error guardando", code, e);
+      }
+    }
+
+    async function loadStoredValues() {
+      const items = await fetchAllStates();
+      const map = {};
+      items.forEach(item => { map[item.id_tarjeta] = item; });
+
+      document.querySelectorAll(".card").forEach(card => {
+        const code = card.getAttribute("data-code");
+        if (!code) return;
+        const item = map[code];
+        if (!item) return;
+
+        const crit = card.querySelector(".criticality-select");
+        const notes = card.querySelector(".notes-textarea");
+
+        if (crit && item.criticidad) crit.value = item.criticidad;
+        if (notes && typeof item.notas === "string") notes.value = item.notas;
+      });
+    }
+
+    function attachSaveListeners() {
+      document.querySelectorAll(".card").forEach(card => {
+        const code = card.getAttribute("data-code");
+        if (!code) return;
+
+        const crit = card.querySelector(".criticality-select");
+        const notes = card.querySelector(".notes-textarea");
+
+        if (crit) {
+          crit.addEventListener("change", () => {
+            saveStateForCard(
+              code,
+              crit.value,
+              notes ? notes.value : ""
+            );
+          });
+        }
+
+        if (notes) {
+          notes.addEventListener("input", () => {
+            saveStateForCard(
+              code,
+              crit ? crit.value : "",
+              notes.value
+            );
+          });
+        }
+      });
+    }
+
+    // Inicialización
+    renderAttachmentsFromFolders();
+    loadStoredValues();
+    attachSaveListeners();
+  </script>
+</body>
+</html>

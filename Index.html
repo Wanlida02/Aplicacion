@@ -922,33 +922,32 @@
     </section>
   </main>
 
-  <script>
-    const toggle = document.getElementById('editModeToggle');
-    const badge = document.getElementById('modeBadge');
-    const editableFields = document.querySelectorAll('.editable-field');
+    
+    const toggle = document.getElementById("editModeToggle");
+    const badge = document.getElementById("modeBadge");
+    const editableFields = document.querySelectorAll(".editable-field");
 
     function setEditMode(isEdit) {
-      editableFields.forEach(el => {
+      editableFields.forEach((el) => {
         el.disabled = !isEdit;
       });
+
       if (isEdit) {
-        badge.textContent = 'Modo edición';
-        badge.style.background = 'rgba(0,0,0,0.35)';
+        badge.textContent = "Modo edición";
+        badge.style.background = "rgba(0,0,0,0.35)";
       } else {
-        badge.textContent = 'Modo usuario';
-        badge.style.background = 'rgba(0,0,0,0.15)';
+        badge.textContent = "Modo usuario";
+        badge.style.background = "rgba(0,0,0,0.15)";
       }
     }
 
-    toggle.addEventListener('change', (e) => {
+    toggle.addEventListener("change", (e) => {
       setEditMode(e.target.checked);
     });
 
-    // Estado inicial: modo usuario
     setEditMode(false);
 
-    // ---- CONFIGURACIÓN DE CARPETAS PARA FINDINGS / QUÉ VER ----
-    const basePath = "/assets"; // carpeta raíz estática en Netlify
+    const basePath = "/assets";
 
     const attachmentsConfig = {
       A01: { folder: "a01 general condition" },
@@ -981,14 +980,14 @@
         const lists = card.querySelectorAll(".attachments-list");
         if (lists.length < 2) return;
 
-        const findingsUl = lists[0];  // primer <ul> = Findings
-        const photosUl   = lists[1];  // segundo <ul> = Qué ver / Fotos
+        const findingsUl = lists[0];
+        const photosUl = lists[1];
 
         const folderPath = `${basePath}/${cfg.folder}`;
 
         findingsUl.innerHTML = `
           <li>
-            <a href="${folderPath}/Findings.pdf" target="_blank">
+            <a href="${folderPath}/Findings.pdf" target="_blank" rel="noopener noreferrer">
               Findings – ${code}
             </a>
           </li>
@@ -996,7 +995,7 @@
 
         photosUl.innerHTML = `
           <li>
-            <a href="${folderPath}/Que ver.pdf" target="_blank">
+            <a href="${folderPath}/Que ver.pdf" target="_blank" rel="noopener noreferrer">
               Qué ver – ${code}
             </a>
           </li>
@@ -1004,7 +1003,6 @@
       });
     }
 
-    // ---- PERSISTENCIA CON AIRTABLE A TRAVÉS DE NETLIFY FUNCTIONS ----
     const API_BASE = "/.netlify/functions";
 
     async function fetchAllStates() {
@@ -1020,15 +1018,22 @@
 
     async function saveStateForCard(code, crit, notes) {
       try {
-        await fetch(`${API_BASE}/save-checklist`, {
+        const res = await fetch(`${API_BASE}/save-checklist`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify({
             id_tarjeta: code,
-            criticidad: crit,
-            notas
+            criticidad: crit || "",
+            notes: notes || ""
           })
         });
+
+        if (!res.ok) {
+          const txt = await res.text();
+          console.error("Error guardando", code, txt);
+        }
       } catch (e) {
         console.error("Error guardando", code, e);
       }
@@ -1037,24 +1042,33 @@
     async function loadStoredValues() {
       const items = await fetchAllStates();
       const map = {};
-      items.forEach(item => { map[item.id_tarjeta] = item; });
 
-      document.querySelectorAll(".card").forEach(card => {
+      items.forEach((item) => {
+        map[item.id_tarjeta] = item;
+      });
+
+      document.querySelectorAll(".card").forEach((card) => {
         const code = card.getAttribute("data-code");
         if (!code) return;
+
         const item = map[code];
         if (!item) return;
 
         const crit = card.querySelector(".criticality-select");
         const notes = card.querySelector(".notes-textarea");
 
-        if (crit && item.criticidad) crit.value = item.criticidad;
-        if (notes && typeof item.notas === "string") notes.value = item.notas;
+        if (crit && item.criticidad) {
+          crit.value = item.criticidad;
+        }
+
+        if (notes && typeof item.notes === "string") {
+          notes.value = item.notes;
+        }
       });
     }
 
     function attachSaveListeners() {
-      document.querySelectorAll(".card").forEach(card => {
+      document.querySelectorAll(".card").forEach((card) => {
         const code = card.getAttribute("data-code");
         if (!code) return;
 
@@ -1063,27 +1077,18 @@
 
         if (crit) {
           crit.addEventListener("change", () => {
-            saveStateForCard(
-              code,
-              crit.value,
-              notes ? notes.value : ""
-            );
+            saveStateForCard(code, crit.value, notes ? notes.value : "");
           });
         }
 
         if (notes) {
           notes.addEventListener("input", () => {
-            saveStateForCard(
-              code,
-              crit ? crit.value : "",
-              notes.value
-            );
+            saveStateForCard(code, crit ? crit.value : "", notes.value);
           });
         }
       });
     }
 
-    // Inicialización
     renderAttachmentsFromFolders();
     loadStoredValues();
     attachSaveListeners();

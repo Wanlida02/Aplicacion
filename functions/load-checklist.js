@@ -10,7 +10,8 @@ exports.handler = async (event, context) => {
       `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}?pageSize=100`,
       {
         headers: {
-          Authorization: `Bearer ${AIRTABLE_TOKEN}`
+          Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+	  "Content-Type": "application/json"
         }
       }
     );

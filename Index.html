@@ -923,175 +923,176 @@
   </main>
 
     
-    const toggle = document.getElementById("editModeToggle");
-    const badge = document.getElementById("modeBadge");
-    const editableFields = document.querySelectorAll(".editable-field");
+    <script>
+  const toggle = document.getElementById("editModeToggle");
+  const badge = document.getElementById("modeBadge");
+  const editableFields = document.querySelectorAll(".editable-field");
 
-    function setEditMode(isEdit) {
-      editableFields.forEach((el) => {
-        el.disabled = !isEdit;
-      });
-
-      if (isEdit) {
-        badge.textContent = "Modo edición";
-        badge.style.background = "rgba(0,0,0,0.35)";
-      } else {
-        badge.textContent = "Modo usuario";
-        badge.style.background = "rgba(0,0,0,0.15)";
-      }
-    }
-
-    toggle.addEventListener("change", (e) => {
-      setEditMode(e.target.checked);
+  function setEditMode(isEdit) {
+    editableFields.forEach((el) => {
+      el.disabled = !isEdit;
     });
 
-    setEditMode(false);
+    if (isEdit) {
+      badge.textContent = "Modo edición";
+      badge.style.background = "rgba(0,0,0,0.35)";
+    } else {
+      badge.textContent = "Modo usuario";
+      badge.style.background = "rgba(0,0,0,0.15)";
+    }
+  }
 
-    const basePath = "/assets";
+  toggle.addEventListener("change", (e) => {
+    setEditMode(e.target.checked);
+  });
 
-    const attachmentsConfig = {
-      A01: { folder: "a01 general condition" },
-      A02: { folder: "a02 emergency exit" },
-      A03: { folder: "a03 equipment" },
-      A04: { folder: "a04 manuals" },
-      A05: { folder: "a05 checklists" },
-      A06: { folder: "a06 navigation charts" },
-      A07: { folder: "a07 mel" },
-      A08: { folder: "a08 certificate of registration" },
-      A09: { folder: "a09 noise certificate" },
-      A10: { folder: "a10 aoc" },
-      A11: { folder: "a11 radio licence" },
-      A12: { folder: "a12 certificate of airworthiness" },
-      A13: { folder: "a13 flight preparation" },
-      A14: { folder: "a14 mass and balance" },
-      A15: { folder: "a15 handfire extinguisher" },
-      A16: { folder: "a16 life jackets" },
-      A17: { folder: "a17 harness" },
-      A18: { folder: "a18 oxygen equipment" },
-      A19: { folder: "a19 portable light" },
-      A20: { folder: "a20 flight crew licence" }
-    };
+  setEditMode(false);
 
-    function renderAttachmentsFromFolders() {
-      Object.entries(attachmentsConfig).forEach(([code, cfg]) => {
-        const card = document.querySelector(`.card[data-code="${code}"]`);
-        if (!card || !cfg.folder) return;
+  const basePath = "/assets";
 
-        const lists = card.querySelectorAll(".attachments-list");
-        if (lists.length < 2) return;
+  const attachmentsConfig = {
+    A01: { folder: "a01 general condition" },
+    A02: { folder: "a02 emergency exit" },
+    A03: { folder: "a03 equipment" },
+    A04: { folder: "a04 manuals" },
+    A05: { folder: "a05 checklists" },
+    A06: { folder: "a06 navigation charts" },
+    A07: { folder: "a07 mel" },
+    A08: { folder: "a08 certificate of registration" },
+    A09: { folder: "a09 noise certificate" },
+    A10: { folder: "a10 aoc" },
+    A11: { folder: "a11 radio licence" },
+    A12: { folder: "a12 certificate of airworthiness" },
+    A13: { folder: "a13 flight preparation" },
+    A14: { folder: "a14 mass and balance" },
+    A15: { folder: "a15 handfire extinguisher" },
+    A16: { folder: "a16 life jackets" },
+    A17: { folder: "a17 harness" },
+    A18: { folder: "a18 oxygen equipment" },
+    A19: { folder: "a19 portable light" },
+    A20: { folder: "a20 flight crew licence" }
+  };
 
-        const findingsUl = lists[0];
-        const photosUl = lists[1];
+  function renderAttachmentsFromFolders() {
+    Object.entries(attachmentsConfig).forEach(([code, cfg]) => {
+      const card = document.querySelector(`.card[data-code="${code}"]`);
+      if (!card || !cfg.folder) return;
 
-        const folderPath = `${basePath}/${cfg.folder}`;
+      const lists = card.querySelectorAll(".attachments-list");
+      if (lists.length < 2) return;
 
-        findingsUl.innerHTML = `
-          <li>
-            <a href="${folderPath}/Findings.pdf" target="_blank" rel="noopener noreferrer">
-              Findings – ${code}
-            </a>
-          </li>
-        `;
+      const findingsUl = lists[0];
+      const photosUl = lists[1];
 
-        photosUl.innerHTML = `
-          <li>
-            <a href="${folderPath}/Que ver.pdf" target="_blank" rel="noopener noreferrer">
-              Qué ver – ${code}
-            </a>
-          </li>
-        `;
+      const folderPath = `${basePath}/${cfg.folder}`;
+
+      findingsUl.innerHTML = `
+        <li>
+          <a href="${folderPath}/Findings.pdf" target="_blank" rel="noopener noreferrer">
+            Findings – ${code}
+          </a>
+        </li>
+      `;
+
+      photosUl.innerHTML = `
+        <li>
+          <a href="${folderPath}/Que ver.pdf" target="_blank" rel="noopener noreferrer">
+            Qué ver – ${code}
+          </a>
+        </li>
+      `;
+    });
+  }
+
+  const API_BASE = "/.netlify/functions";
+
+  async function fetchAllStates() {
+    try {
+      const res = await fetch(`${API_BASE}/load-checklist`);
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.error("Error cargando estados", e);
+      return [];
+    }
+  }
+
+  async function saveStateForCard(code, crit, notes) {
+    try {
+      const res = await fetch(`${API_BASE}/save-checklist`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id_tarjeta: code,
+          criticidad: crit || "",
+          notes: notes || ""
+        })
       });
-    }
 
-    const API_BASE = "/.netlify/functions";
-
-    async function fetchAllStates() {
-      try {
-        const res = await fetch(`${API_BASE}/load-checklist`);
-        if (!res.ok) return [];
-        return await res.json();
-      } catch (e) {
-        console.error("Error cargando estados", e);
-        return [];
+      if (!res.ok) {
+        const txt = await res.text();
+        console.error("Error guardando", code, txt);
       }
+    } catch (e) {
+      console.error("Error guardando", code, e);
     }
+  }
 
-    async function saveStateForCard(code, crit, notes) {
-      try {
-        const res = await fetch(`${API_BASE}/save-checklist`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            id_tarjeta: code,
-            criticidad: crit || "",
-            notes: notes || ""
-          })
+  async function loadStoredValues() {
+    const items = await fetchAllStates();
+    const map = {};
+
+    items.forEach((item) => {
+      map[item.id_tarjeta] = item;
+    });
+
+    document.querySelectorAll(".card").forEach((card) => {
+      const code = card.getAttribute("data-code");
+      if (!code) return;
+
+      const item = map[code];
+      if (!item) return;
+
+      const crit = card.querySelector(".criticality-select");
+      const notes = card.querySelector(".notes-textarea");
+
+      if (crit && item.criticidad) {
+        crit.value = item.criticidad;
+      }
+
+      if (notes && typeof item.notes === "string") {
+        notes.value = item.notes;
+      }
+    });
+  }
+
+  function attachSaveListeners() {
+    document.querySelectorAll(".card").forEach((card) => {
+      const code = card.getAttribute("data-code");
+      if (!code) return;
+
+      const crit = card.querySelector(".criticality-select");
+      const notes = card.querySelector(".notes-textarea");
+
+      if (crit) {
+        crit.addEventListener("change", () => {
+          saveStateForCard(code, crit.value, notes ? notes.value : "");
         });
-
-        if (!res.ok) {
-          const txt = await res.text();
-          console.error("Error guardando", code, txt);
-        }
-      } catch (e) {
-        console.error("Error guardando", code, e);
       }
-    }
 
-    async function loadStoredValues() {
-      const items = await fetchAllStates();
-      const map = {};
+      if (notes) {
+        notes.addEventListener("input", () => {
+          saveStateForCard(code, crit ? crit.value : "", notes.value);
+        });
+      }
+    });
+  }
 
-      items.forEach((item) => {
-        map[item.id_tarjeta] = item;
-      });
-
-      document.querySelectorAll(".card").forEach((card) => {
-        const code = card.getAttribute("data-code");
-        if (!code) return;
-
-        const item = map[code];
-        if (!item) return;
-
-        const crit = card.querySelector(".criticality-select");
-        const notes = card.querySelector(".notes-textarea");
-
-        if (crit && item.criticidad) {
-          crit.value = item.criticidad;
-        }
-
-        if (notes && typeof item.notes === "string") {
-          notes.value = item.notes;
-        }
-      });
-    }
-
-    function attachSaveListeners() {
-      document.querySelectorAll(".card").forEach((card) => {
-        const code = card.getAttribute("data-code");
-        if (!code) return;
-
-        const crit = card.querySelector(".criticality-select");
-        const notes = card.querySelector(".notes-textarea");
-
-        if (crit) {
-          crit.addEventListener("change", () => {
-            saveStateForCard(code, crit.value, notes ? notes.value : "");
-          });
-        }
-
-        if (notes) {
-          notes.addEventListener("input", () => {
-            saveStateForCard(code, crit ? crit.value : "", notes.value);
-          });
-        }
-      });
-    }
-
-    renderAttachmentsFromFolders();
-    loadStoredValues();
-    attachSaveListeners();
-  </script>
+  renderAttachmentsFromFolders();
+  loadStoredValues();
+  attachSaveListeners();
+</script>
 </body>
 </html>
